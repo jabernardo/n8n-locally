@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: n8n
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=admin
+      - N8N_BASIC_AUTH_PASSWORD=admin123
+      - N8N_HOST=localhost
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - NODE_ENV=production
+      # Enable internal task runners
+      - EXECUTIONS_MODE=internal
+      - N8N_RUNNERS_AUTH_TOKEN=supersecret123
+    volumes:
+      - ./n8n_data:/home/node/.n8n
+    restart: always
+
+  runners:
+    image: n8nio/runners:latest
+    container_name: n8n_runners
+    environment:
+      - N8N_HOST=n8n
+      - N8N_PORT=5678
+      - NODE_ENV=production
+      - N8N_RUNNERS_AUTH_TOKEN=supersecret123
+    depends_on:
+      - n8n
+    volumes:
+      - ./n8n_data:/home/node/.n8n
+    restart: always
