@@ -17,6 +17,11 @@ services:
       # Enable internal task runners
       - EXECUTIONS_MODE=internal
       - N8N_RUNNERS_AUTH_TOKEN=supersecret123
+      # Host
+      - WEBHOOK_URL=https://{N8N_HOST}
+      - N8N_HOST={N8N_HOST}
+      - N8N_PROTOCOL=https
+      - N8N_PORT=5678
     volumes:
       - ./n8n_data:/home/node/.n8n
     restart: always
